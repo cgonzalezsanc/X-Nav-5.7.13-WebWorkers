@@ -5,17 +5,17 @@
 
   <script>
 function buscarPrimos() {
-  var n = 1;
-  primelist = "";
-  search: while (n<parseInt(document.getElementById("formulario").input.value)) {
-    n += 1;
-    for (var i = 2; i <= Math.sqrt(n); i += 1)
-      if (n % i == 0)
-        continue search;
-    // found a prime!
-    primelist += " " + n;
-    document.getElementById('result').innerHTML = primelist;
-  }
+	// Reseteo los resultados
+	document.getElementById('result').innerHTML = "";
+	// Inicializo el worker
+	var worker = new Worker("worker.js");
+	// Le paso el número hasta el que buscar los números primos
+	worker.postMessage(parseInt(document.getElementById("formulario").input.value));
+	// Recojo lo que me devuelve
+	worker.onmessage = function(event) {
+		document.getElementById('result').innerHTML += event.data;
+	};
+	//worker.terminate();
 }
   </script>
 
